@@ -6,9 +6,13 @@ st.set_page_config(page_title="朋友圈文案生成器", page_icon="✍️")
 st.title("✍️ 朋友圈文案生成器")
 
 api_key = os.environ.get("ANTHROPIC_API_KEY")
+base_url = os.environ.get("ANTHROPIC_BASE_URL")
+
 if not api_key:
-    st.error("未找到 ANTHROPIC_API_KEY 环境变量，请先运行：export ANTHROPIC_API_KEY='你的key'")
+    st.error("未找到 ANTHROPIC_API_KEY 环境变量，请先设置")
     st.stop()
+
+st.caption(f"API 地址：{base_url or 'https://api.anthropic.com（官方默认）'}")
 
 voice_text = st.text_area(
     "粘贴你的语音转文字内容",
@@ -48,13 +52,18 @@ if st.button("生成文案", type="primary"):
 {voice_text}
 """
         with st.spinner("正在生成中..."):
-            client = anthropic.Anthropic(api_key=api_key)
-            response = client.messages.create(
-                model="claude-sonnet-4-6",
-                max_tokens=1024,
-                messages=[{"role": "user", "content": prompt}]
-            )
-            content = response.content[0].text
-
-        st.success("生成完成！")
-        st.markdown(content)
+            try:
+                client_kwargs = {"api_key": api_key}
+                if base_url:
+                    client_kwargs["base_url"] = base_url
+                client = anthropic.Anthropic(**client_kwargs)
+                response = client.messages.create(
+                    model="claude-sonnet-4-6",
+                    max_tokens=1024,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                content = response.content[0].text
+                st.success("生成完成！")
+                st.markdown(content)
+            except Exception as e:
+                st.error(f"请求失败：{type(e).__name__}: {e}")
