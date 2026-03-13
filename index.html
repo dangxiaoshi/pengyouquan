@@ -6,71 +6,121 @@
 <title>朋友圈文案生成器</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; color: #222; padding: 24px; }
-  .container { max-width: 800px; margin: 0 auto; }
-  h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-  .subtitle { color: #666; font-size: 14px; margin-bottom: 24px; }
-  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #444; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
+    background: #fafafa; color: #1d1d1f;
+    padding: 0; min-height: 100vh;
+  }
+  .header {
+    text-align: center; padding: 48px 24px 20px;
+  }
+  .step-tag {
+    display: inline-block; padding: 6px 16px;
+    background: #FFF8EC; border-radius: 20px;
+    font-size: 13px; font-weight: 600; color: #F5A623;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+    color: #1d1d1f; margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 16px; color: #86868b; font-weight: 400;
+    letter-spacing: 0.2px;
+  }
+  .main { max-width: 680px; margin: 0 auto; padding: 0 24px 48px; }
+  .card {
+    background: #fff; border-radius: 16px;
+    padding: 28px; margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .card-label {
+    font-size: 13px; font-weight: 600; color: #86868b;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
   textarea {
-    width: 100%; border: 1px solid #ddd; border-radius: 8px;
-    padding: 12px; font-size: 14px; font-family: inherit;
-    background: #fff; resize: vertical; outline: none;
-    transition: border-color 0.2s;
+    width: 100%; border: none; background: transparent;
+    font-size: 15px; line-height: 1.7; font-family: inherit;
+    color: #1d1d1f; resize: vertical; outline: none;
+    min-height: 180px;
   }
-  textarea:focus { border-color: #555; }
-  .field { margin-bottom: 16px; }
-  .hint { font-size: 12px; color: #999; margin-top: 4px; }
-  button {
-    width: 100%; padding: 14px; background: #111; color: #fff;
-    border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: background 0.2s; margin-top: 4px;
+  textarea::placeholder { color: #c7c7cc; }
+  .btn-primary {
+    width: 100%; padding: 16px; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    background: #F5A623; color: #fff;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(245,166,35,0.3);
   }
-  button:hover { background: #333; }
-  button:disabled { background: #999; cursor: not-allowed; }
-  .output-section { margin-top: 32px; }
-  .output-block {
-    background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
-    padding: 20px; margin-bottom: 16px;
+  .btn-primary:hover { background: #e6991a; box-shadow: 0 4px 12px rgba(245,166,35,0.4); }
+  .btn-primary:disabled { background: #d2d2d7; box-shadow: none; cursor: not-allowed; }
+  .error { color: #ff3b30; font-size: 13px; margin-top: 10px; text-align: center; }
+  .output-section { margin-top: 12px; }
+  .output-card {
+    background: #fff; border-radius: 16px;
+    padding: 28px; margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .output-label {
+    font-size: 13px; font-weight: 600; color: #F5A623;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 16px;
   }
   .output-content {
-    font-size: 14px; line-height: 1.8; color: #333;
+    font-size: 15px; line-height: 1.8; color: #1d1d1f;
     white-space: pre-wrap; word-break: break-word;
   }
-  .copy-btn {
-    width: auto; padding: 6px 14px; font-size: 12px; font-weight: 500;
-    background: #f0f0f0; color: #333; border-radius: 6px; margin-top: 12px;
+  .btn-copy {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border: 1px solid #e5e5ea; border-radius: 10px;
+    font-size: 14px; font-weight: 500; color: #1d1d1f;
+    background: #fff; cursor: pointer; margin-top: 20px;
+    transition: all 0.2s ease; width: auto;
   }
-  .copy-btn:hover { background: #e0e0e0; }
-  .error { color: #c0392b; font-size: 13px; margin-top: 8px; }
+  .btn-copy:hover { background: #f5f5f7; border-color: #F5A623; color: #F5A623; }
   .spinner {
     display: inline-block; width: 18px; height: 18px;
-    border: 2px solid #ccc; border-top-color: #333;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
     border-radius: 50%; animation: spin 0.7s linear infinite;
     vertical-align: middle; margin-right: 8px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .footer {
+    text-align: center; padding: 24px;
+    font-size: 12px; color: #c7c7cc;
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>✍️ 朋友圈文案生成器</h1>
-  <p class="subtitle">粘贴语音转文字内容，一键生成朋友圈文案</p>
 
-  <div class="field">
-    <label>语音转文字内容</label>
-    <textarea id="voiceText" rows="10" placeholder="把语音转出来的原始文字粘贴进来，不用整理，越原始越好……"></textarea>
+<div class="header">
+  <div class="step-tag">✍️ 文案助手</div>
+  <h1>朋友圈文案生成器</h1>
+  <p class="subtitle">粘贴语音转文字，一键生成朋友圈文案</p>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="card-label">语音转文字内容</div>
+    <textarea id="voiceText" rows="8" placeholder="把语音转出来的原始文字粘贴进来，不用整理，越原始越好
+
+比如：今天跟一个客户聊了两个小时，他一开始说预算只有五万，后来聊着聊着发现他其实不是没钱，是不确定效果，我就跟他说了我们之前做的一个案例……"></textarea>
   </div>
 
-  <button id="generateBtn" onclick="generate()">生成文案</button>
+  <button class="btn-primary" id="generateBtn" onclick="generate()">生成文案</button>
   <div id="error" class="error"></div>
 
   <div id="outputSection" class="output-section" style="display:none">
-    <div class="output-block">
+    <div class="output-card">
+      <div class="output-label">生成的文案</div>
       <div class="output-content" id="outputAll"></div>
-      <button class="copy-btn" onclick="copyAll(this)">复制全部内容</button>
+      <button class="btn-copy" onclick="copyAll(this)">📋 一键复制</button>
     </div>
   </div>
 </div>
+
+<div class="footer">朋友圈文案生成器 · AI 驱动</div>
 
 <script>
 const API_KEY = 'sk-s32x3JETsnsisEWG3e01Ee94B7Ba464fB7E830Fc41Ea2899';
@@ -156,8 +206,8 @@ async function generate() {
 function copyAll(btn) {
   const text = document.getElementById('outputAll').textContent;
   navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '已复制 ✓';
-    setTimeout(() => btn.textContent = '复制全部内容', 1500);
+    btn.innerHTML = '✅ 已复制';
+    setTimeout(() => btn.innerHTML = '📋 一键复制', 1500);
   });
 }
 </script>
