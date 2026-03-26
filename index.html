@@ -57,28 +57,60 @@
   .btn-primary:disabled { background: #d2d2d7; box-shadow: none; cursor: not-allowed; }
   .error { color: #ff3b30; font-size: 13px; margin-top: 10px; text-align: center; }
   .output-section { margin-top: 12px; }
-  .output-card {
+
+  /* 连载卡片 */
+  .post-card {
     background: #fff; border-radius: 16px;
-    padding: 28px; margin-bottom: 20px;
+    padding: 24px 28px; margin-bottom: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    position: relative;
   }
-  .output-label {
-    font-size: 13px; font-weight: 600; color: #F5A623;
-    text-transform: uppercase; letter-spacing: 0.5px;
-    margin-bottom: 16px;
+  .post-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
   }
-  .output-content {
-    font-size: 15px; line-height: 1.8; color: #1d1d1f;
+  .post-number {
+    font-size: 12px; font-weight: 600; color: #c7c7cc;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .post-number .jies-tag {
+    background: #FFF8EC; color: #F5A623;
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 600;
+  }
+  .post-content {
+    font-size: 15px; line-height: 1.85; color: #1d1d1f;
     white-space: pre-wrap; word-break: break-word;
   }
-  .btn-copy {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 20px; border: 1px solid #e5e5ea; border-radius: 10px;
-    font-size: 14px; font-weight: 500; color: #1d1d1f;
-    background: #fff; cursor: pointer; margin-top: 20px;
-    transition: all 0.2s ease; width: auto;
+  .btn-copy-single {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 14px; border: 1px solid #e5e5ea; border-radius: 8px;
+    font-size: 13px; font-weight: 500; color: #86868b;
+    background: #fff; cursor: pointer; margin-top: 16px;
+    transition: all 0.2s ease;
   }
-  .btn-copy:hover { background: #f5f5f7; border-color: #F5A623; color: #F5A623; }
+  .btn-copy-single:hover { border-color: #F5A623; color: #F5A623; background: #FFFBF2; }
+
+  /* 连接线 */
+  .post-connector {
+    display: flex; align-items: center; justify-content: center;
+    height: 20px; margin: -4px 0;
+    color: #e5e5ea; font-size: 18px; line-height: 1;
+  }
+
+  /* 底部全部复制 */
+  .copy-all-wrap {
+    margin-top: 8px; text-align: center;
+  }
+  .btn-copy-all {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 12px 28px; border: 1.5px solid #F5A623; border-radius: 10px;
+    font-size: 14px; font-weight: 600; color: #F5A623;
+    background: #fff; cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-copy-all:hover { background: #FFF8EC; }
+
   .spinner {
     display: inline-block; width: 18px; height: 18px;
     border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
@@ -97,7 +129,7 @@
 <div class="header">
   <div class="step-tag">✍️ 文案助手</div>
   <h1>朋友圈文案生成器</h1>
-  <p class="subtitle">粘贴语音转文字，一键生成朋友圈文案</p>
+  <p class="subtitle">粘贴语音转文字，一键生成连载朋友圈</p>
 </div>
 
 <div class="main">
@@ -112,10 +144,9 @@
   <div id="error" class="error"></div>
 
   <div id="outputSection" class="output-section" style="display:none">
-    <div class="output-card">
-      <div class="output-label">生成的文案</div>
-      <div class="output-content" id="outputAll"></div>
-      <button class="btn-copy" onclick="copyAll(this)">📋 一键复制</button>
+    <div id="postsContainer"></div>
+    <div class="copy-all-wrap">
+      <button class="btn-copy-all" onclick="copyAll(this)">📋 全部复制（合并为长文）</button>
     </div>
   </div>
 </div>
@@ -129,9 +160,15 @@ const BASE_URL = 'https://new.pumpkinai.vip/v1/messages';
 function buildPrompt(voiceText) {
   return `你是我的朋友圈文案助手。我会给你一段语音转文字的原始内容，里面有重复、跑题、口语填充词，没关系。
 
-你的任务：从这段话里提炼出所有值得发的观点，按观点的犀利程度筛选，生成2-5条四段式朋友圈文案。观点不够犀利的不要写，宁少勿滥。
+你的任务：把这段内容提炼成一组层层深入的连载朋友圈，共4-6条。每条单独发出去是完整独立的段落，合在一起是一篇深度长文。
 
-朋友圈不是日记，是私域内容。读者是潜在客户，他们在刷朋友圈的时候，你的内容要能让他们停下来、有感触、觉得这个人说的有道理，甚至想找你聊。所以每一条文案都要有用户视角：不是在记录我今天做了什么，而是在输出一个对读者有价值的观点或洞察，让他们觉得关注你是值得的。
+朋友圈不是日记，是私域内容。读者是潜在客户，他们在刷朋友圈的时候，你的内容要能让他们停下来、有感触、觉得这个人说的有道理，甚至想找你聊。整组连载要有用户视角：不是在记录我今天做了什么，而是在输出一个对读者有价值的观点或洞察。
+
+【连载结构】
+- 第一条：亮出核心观点，用一个细节或反常识的结论做钩子，让人想看下去。第一条不加任何前缀，直接开始。
+- 第二条起：每条的第一个字开始就是「接上条」三个字，紧接着继续深挖——加原因、加案例、加延伸、或者补充转折。「接上条」后面直接跟内容，不加冒号、不加空格、不换行。
+- 最后一条：收尾，给出结论、反问或行动号召，同样以「接上条」开头。
+- 逻辑要层层递进：第一条抛问题/结论，后续条目解释为什么/怎么做/案例是什么，最后给结论或引共鸣。
 
 【风格要求】
 - 口语化，视觉上读起来流畅
@@ -144,14 +181,69 @@ function buildPrompt(voiceText) {
 - 绝对禁止使用以下词汇和句式：稳稳接住、扛着、看见自己、疗愈、破防、共鸣、赋能、内耗、松弛感、钝感力、向内探索、与自己和解、任何XX的我句式、任何愿你XX句式
 
 【格式】
-- 输出里不要出现【观点】【原因】【案例】【总结】这些标签，也不要出现第1条第2条这类编号
-- 每条内部按观点、原因、案例、总结的顺序写，但标签不显示
-- 每段之间空一行，每条之间用 --- 分隔
-- 整体长短根据语料决定，不要强行拉长也不要强行压缩
+- 每条内部每段之间空一行
+- 每条之间用单独一行 --- 分隔
+- 不要输出任何额外说明、标题、编号
 - 输出的内容要可以直接复制粘贴发朋友圈，不需要任何修改
 
 原始语音内容：
 ${voiceText}`;
+}
+
+let allPostsText = '';
+
+function renderPosts(text) {
+  const posts = text.split(/\n---\n/).map(p => p.trim()).filter(p => p);
+  allPostsText = posts.join('\n\n---\n\n');
+
+  const container = document.getElementById('postsContainer');
+  container.innerHTML = '';
+
+  posts.forEach((post, i) => {
+    // connector between cards
+    if (i > 0) {
+      const connector = document.createElement('div');
+      connector.className = 'post-connector';
+      connector.textContent = '↓';
+      container.appendChild(connector);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'post-card';
+
+    const header = document.createElement('div');
+    header.className = 'post-header';
+
+    const numLabel = document.createElement('div');
+    numLabel.className = 'post-number';
+    numLabel.textContent = `第 ${i + 1} 条`;
+    if (i > 0) {
+      const tag = document.createElement('span');
+      tag.className = 'jies-tag';
+      tag.textContent = '接上条';
+      numLabel.appendChild(tag);
+    }
+    header.appendChild(numLabel);
+    card.appendChild(header);
+
+    const content = document.createElement('div');
+    content.className = 'post-content';
+    content.textContent = post;
+    card.appendChild(content);
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'btn-copy-single';
+    copyBtn.innerHTML = '📋 复制这条';
+    copyBtn.onclick = function() {
+      navigator.clipboard.writeText(post).then(() => {
+        copyBtn.innerHTML = '✅ 已复制';
+        setTimeout(() => copyBtn.innerHTML = '📋 复制这条', 1500);
+      });
+    };
+    card.appendChild(copyBtn);
+
+    container.appendChild(card);
+  });
 }
 
 async function generate() {
@@ -166,6 +258,7 @@ async function generate() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>生成中...';
   document.getElementById('outputSection').style.display = 'none';
+  document.getElementById('postsContainer').innerHTML = '';
 
   try {
     const res = await fetch(BASE_URL, {
@@ -191,7 +284,7 @@ async function generate() {
     const data = await res.json();
     const text = data.content[0].text;
 
-    document.getElementById('outputAll').textContent = text;
+    renderPosts(text);
     document.getElementById('outputSection').style.display = 'block';
     document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
 
@@ -204,13 +297,11 @@ async function generate() {
 }
 
 function copyAll(btn) {
-  const text = document.getElementById('outputAll').textContent;
-  navigator.clipboard.writeText(text).then(() => {
+  navigator.clipboard.writeText(allPostsText).then(() => {
     btn.innerHTML = '✅ 已复制';
-    setTimeout(() => btn.innerHTML = '📋 一键复制', 1500);
+    setTimeout(() => btn.innerHTML = '📋 全部复制（合并为长文）', 1500);
   });
 }
 </script>
 </body>
 </html>
-
