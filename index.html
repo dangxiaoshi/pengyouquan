@@ -11,103 +11,103 @@
     background: #fafafa; color: #1d1d1f;
     padding: 0; min-height: 100vh;
   }
-  .header {
-    text-align: center; padding: 48px 24px 20px;
-  }
+  .header { text-align: center; padding: 48px 24px 20px; }
   .step-tag {
     display: inline-block; padding: 6px 16px;
     background: #FFF8EC; border-radius: 20px;
-    font-size: 13px; font-weight: 600; color: #F5A623;
-    margin-bottom: 8px;
+    font-size: 13px; font-weight: 600; color: #F5A623; margin-bottom: 8px;
   }
   .header h1 {
     font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
     color: #1d1d1f; margin-bottom: 6px;
   }
-  .header .subtitle {
-    font-size: 16px; color: #86868b; font-weight: 400;
-    letter-spacing: 0.2px;
-  }
+  .header .subtitle { font-size: 16px; color: #86868b; font-weight: 400; }
   .main { max-width: 680px; margin: 0 auto; padding: 0 24px 48px; }
   .card {
-    background: #fff; border-radius: 16px;
-    padding: 28px; margin-bottom: 20px;
+    background: #fff; border-radius: 16px; padding: 28px; margin-bottom: 20px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
   .card-label {
     font-size: 13px; font-weight: 600; color: #86868b;
-    text-transform: uppercase; letter-spacing: 0.5px;
-    margin-bottom: 14px;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;
   }
   textarea {
     width: 100%; border: none; background: transparent;
     font-size: 15px; line-height: 1.7; font-family: inherit;
-    color: #1d1d1f; resize: vertical; outline: none;
-    min-height: 180px;
+    color: #1d1d1f; resize: vertical; outline: none; min-height: 180px;
   }
   textarea::placeholder { color: #c7c7cc; }
   .btn-primary {
     width: 100%; padding: 16px; border: none; border-radius: 12px;
     font-size: 16px; font-weight: 600; cursor: pointer;
-    background: #F5A623; color: #fff;
-    transition: all 0.2s ease;
+    background: #F5A623; color: #fff; transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(245,166,35,0.3);
   }
-  .btn-primary:hover { background: #e6991a; box-shadow: 0 4px 12px rgba(245,166,35,0.4); }
+  .btn-primary:hover { background: #e6991a; }
   .btn-primary:disabled { background: #d2d2d7; box-shadow: none; cursor: not-allowed; }
   .error { color: #ff3b30; font-size: 13px; margin-top: 10px; text-align: center; }
   .output-section { margin-top: 12px; }
 
+  /* 大标题区 */
+  .main-title-card {
+    background: #FFF8EC; border-radius: 16px; padding: 20px 28px;
+    margin-bottom: 16px; text-align: center;
+  }
+  .main-title-label {
+    font-size: 11px; font-weight: 600; color: #F5A623;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .main-title-text {
+    font-size: 18px; font-weight: 700; color: #1d1d1f; line-height: 1.5;
+  }
+
   /* 连载卡片 */
   .post-card {
-    background: #fff; border-radius: 16px;
-    padding: 24px 28px; margin-bottom: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    position: relative;
+    background: #fff; border-radius: 16px; padding: 24px 28px;
+    margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  .post-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 14px;
+  .post-meta {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
   }
-  .post-number {
-    font-size: 12px; font-weight: 600; color: #c7c7cc;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .post-number .jies-tag {
+  .post-num { font-size: 12px; color: #c7c7cc; font-weight: 500; }
+  .jies-tag {
     background: #FFF8EC; color: #F5A623;
-    padding: 2px 8px; border-radius: 10px;
+    padding: 2px 8px; border-radius: 8px;
     font-size: 11px; font-weight: 600;
   }
+  .post-heading {
+    font-size: 15px; font-weight: 700; color: #1d1d1f;
+    margin-bottom: 12px; line-height: 1.5;
+  }
   .post-content {
-    font-size: 15px; line-height: 1.85; color: #1d1d1f;
+    font-size: 15px; line-height: 1.85; color: #333;
     white-space: pre-wrap; word-break: break-word;
+  }
+  .post-actions {
+    display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;
   }
   .btn-copy-single {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 7px 14px; border: 1px solid #e5e5ea; border-radius: 8px;
     font-size: 13px; font-weight: 500; color: #86868b;
-    background: #fff; cursor: pointer; margin-top: 16px;
-    transition: all 0.2s ease;
+    background: #fff; cursor: pointer; transition: all 0.2s ease;
   }
   .btn-copy-single:hover { border-color: #F5A623; color: #F5A623; background: #FFFBF2; }
 
-  /* 连接线 */
   .post-connector {
-    display: flex; align-items: center; justify-content: center;
-    height: 20px; margin: -4px 0;
-    color: #e5e5ea; font-size: 18px; line-height: 1;
+    text-align: center; color: #d2d2d7; font-size: 16px;
+    margin: -2px 0; line-height: 1;
   }
 
-  /* 底部全部复制 */
-  .copy-all-wrap {
-    margin-top: 8px; text-align: center;
-  }
+  /* 全部复制 */
+  .copy-all-wrap { margin-top: 12px; text-align: center; }
   .btn-copy-all {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 12px 28px; border: 1.5px solid #F5A623; border-radius: 10px;
-    font-size: 14px; font-weight: 600; color: #F5A623;
-    background: #fff; cursor: pointer;
-    transition: all 0.2s ease;
+    padding: 13px 28px; border: 1.5px solid #F5A623; border-radius: 12px;
+    font-size: 15px; font-weight: 600; color: #F5A623;
+    background: #fff; cursor: pointer; transition: all 0.2s ease;
+    width: 100%;
+    justify-content: center;
   }
   .btn-copy-all:hover { background: #FFF8EC; }
 
@@ -118,10 +118,7 @@
     vertical-align: middle; margin-right: 8px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .footer {
-    text-align: center; padding: 24px;
-    font-size: 12px; color: #c7c7cc;
-  }
+  .footer { text-align: center; padding: 24px; font-size: 12px; color: #c7c7cc; }
 </style>
 </head>
 <body>
@@ -129,7 +126,7 @@
 <div class="header">
   <div class="step-tag">✍️ 文案助手</div>
   <h1>朋友圈文案生成器</h1>
-  <p class="subtitle">粘贴语音转文字，一键生成连载朋友圈</p>
+  <p class="subtitle">粘贴语音转文字，生成三条连载 · 合并即公众号</p>
 </div>
 
 <div class="main">
@@ -144,9 +141,13 @@
   <div id="error" class="error"></div>
 
   <div id="outputSection" class="output-section" style="display:none">
+    <div id="mainTitleCard" class="main-title-card">
+      <div class="main-title-label">公众号标题</div>
+      <div class="main-title-text" id="mainTitleText"></div>
+    </div>
     <div id="postsContainer"></div>
     <div class="copy-all-wrap">
-      <button class="btn-copy-all" onclick="copyAll(this)">📋 全部复制（合并为长文）</button>
+      <button class="btn-copy-all" onclick="copyAll(this)">📄 全部复制（合并为完整公众号）</button>
     </div>
   </div>
 </div>
@@ -160,47 +161,73 @@ const BASE_URL = 'https://new.pumpkinai.vip/v1/messages';
 function buildPrompt(voiceText) {
   return `你是我的朋友圈文案助手。我会给你一段语音转文字的原始内容，里面有重复、跑题、口语填充词，没关系。
 
-你的任务：把这段内容提炼成一组层层深入的连载朋友圈，共4-6条。每条单独发出去是完整独立的段落，合在一起是一篇深度长文。
+你的任务：把这段内容提炼成一个三条连载的朋友圈系列。三条单独发是完整的朋友圈，合在一起是一篇结构完整的公众号文章。
 
-朋友圈不是日记，是私域内容。读者是潜在客户，他们在刷朋友圈的时候，你的内容要能让他们停下来、有感触、觉得这个人说的有道理，甚至想找你聊。整组连载要有用户视角：不是在记录我今天做了什么，而是在输出一个对读者有价值的观点或洞察。
+【结构要求】
+生成恰好三条，每条有自己的小标题。三个小标题合在一起要像一篇文章的三个章节——有开头、有展开、有收尾。
 
-【连载结构】
-- 第一条：亮出核心观点，用一个细节或反常识的结论做钩子，让人想看下去。第一条不加任何前缀，直接开始。
-- 第二条起：每条的第一个字开始就是「接上条」三个字，紧接着继续深挖——加原因、加案例、加延伸、或者补充转折。「接上条」后面直接跟内容，不加冒号、不加空格、不换行。
-- 最后一条：收尾，给出结论、反问或行动号召，同样以「接上条」开头。
-- 逻辑要层层递进：第一条抛问题/结论，后续条目解释为什么/怎么做/案例是什么，最后给结论或引共鸣。
+第一条：点出核心观点，用一个细节或反常识的结论做钩子
+第二条：深挖原因或展开案例，承接第一条
+第三条：给出结论、方法或反问收尾，升华整篇
+
+【朋友圈发布格式】
+- 第一条：直接以小标题开头，格式为「【小标题】」，下面接正文
+- 第二、三条：第一行是「接上条」，第二行是「【小标题】」，然后接正文
 
 【风格要求】
-- 口语化，视觉上读起来流畅
-- 长短句交替，有节奏感和韵律感。短句用来点题或收尾，长句用来铺陈和解释，不要全是短句也不要全是长句
-- 自问自答的句式自然出现：为什么？因为……
-- 就是、然后、哎呀、搞 这类词可以用，但不要堆，点到为止
-- 结尾可以用反问收尾，有点个人立场，但不说教
+- 口语化，读起来流畅自然
+- 长短句交替，有节奏感。短句点题，长句铺陈
+- 自问自答自然出现：为什么？因为……
+- 就是、然后、哎呀、搞 这类词可以用，点到为止
+- 结尾可以用反问，有个人立场，不说教
 - 举真实的生活细节，不举大道理
 - 绝对禁止使用双引号
-- 绝对禁止使用以下词汇和句式：稳稳接住、扛着、看见自己、疗愈、破防、共鸣、赋能、内耗、松弛感、钝感力、向内探索、与自己和解、任何XX的我句式、任何愿你XX句式
+- 禁止词：稳稳接住、扛着、看见自己、疗愈、破防、共鸣、赋能、内耗、松弛感、钝感力、向内探索、与自己和解、任何XX的我句式、任何愿你XX句式
 
-【格式】
-- 每条内部每段之间空一行
-- 每条之间用单独一行 --- 分隔
-- 不要输出任何额外说明、标题、编号
-- 输出的内容要可以直接复制粘贴发朋友圈，不需要任何修改
+【输出格式】（严格按照这个格式，不要加任何额外说明）
+TITLE:这里是公众号大标题
+===
+HEADING:第一条小标题
+第一条正文（段落之间空一行）
+---
+HEADING:第二条小标题
+第二条正文（段落之间空一行）
+---
+HEADING:第三条小标题
+第三条正文（段落之间空一行）
 
 原始语音内容：
 ${voiceText}`;
 }
 
-let allPostsText = '';
+let parsedData = null;
 
-function renderPosts(text) {
-  const posts = text.split(/\n---\n/).map(p => p.trim()).filter(p => p);
-  allPostsText = posts.join('\n\n---\n\n');
+function parseOutput(text) {
+  const titleMatch = text.match(/TITLE:(.+)/);
+  const mainTitle = titleMatch ? titleMatch[1].trim() : '';
+
+  const body = text.split('===')[1] || text;
+  const sections = body.split('---').map(s => s.trim()).filter(s => s);
+
+  const posts = sections.map(section => {
+    const headingMatch = section.match(/HEADING:(.+)/);
+    const heading = headingMatch ? headingMatch[1].trim() : '';
+    const content = section.replace(/HEADING:.+\n?/, '').trim();
+    return { heading, content };
+  });
+
+  return { mainTitle, posts };
+}
+
+function renderPosts(data) {
+  const { mainTitle, posts } = data;
+
+  document.getElementById('mainTitleText').textContent = mainTitle;
 
   const container = document.getElementById('postsContainer');
   container.innerHTML = '';
 
   posts.forEach((post, i) => {
-    // connector between cards
     if (i > 0) {
       const connector = document.createElement('div');
       connector.className = 'post-connector';
@@ -211,39 +238,62 @@ function renderPosts(text) {
     const card = document.createElement('div');
     card.className = 'post-card';
 
-    const header = document.createElement('div');
-    header.className = 'post-header';
-
-    const numLabel = document.createElement('div');
-    numLabel.className = 'post-number';
-    numLabel.textContent = `第 ${i + 1} 条`;
+    // meta row
+    const meta = document.createElement('div');
+    meta.className = 'post-meta';
+    const num = document.createElement('span');
+    num.className = 'post-num';
+    num.textContent = `第 ${i + 1} 条`;
+    meta.appendChild(num);
     if (i > 0) {
       const tag = document.createElement('span');
       tag.className = 'jies-tag';
       tag.textContent = '接上条';
-      numLabel.appendChild(tag);
+      meta.appendChild(tag);
     }
-    header.appendChild(numLabel);
-    card.appendChild(header);
+    card.appendChild(meta);
 
+    // heading
+    const heading = document.createElement('div');
+    heading.className = 'post-heading';
+    heading.textContent = `【${post.heading}】`;
+    card.appendChild(heading);
+
+    // content
     const content = document.createElement('div');
     content.className = 'post-content';
-    content.textContent = post;
+    content.textContent = post.content;
     card.appendChild(content);
 
+    // copy button
+    const actions = document.createElement('div');
+    actions.className = 'post-actions';
     const copyBtn = document.createElement('button');
     copyBtn.className = 'btn-copy-single';
     copyBtn.innerHTML = '📋 复制这条';
+
+    // build the text for copying this single post
+    const postText = i === 0
+      ? `【${post.heading}】\n\n${post.content}`
+      : `接上条\n【${post.heading}】\n\n${post.content}`;
+
     copyBtn.onclick = function() {
-      navigator.clipboard.writeText(post).then(() => {
+      navigator.clipboard.writeText(postText).then(() => {
         copyBtn.innerHTML = '✅ 已复制';
         setTimeout(() => copyBtn.innerHTML = '📋 复制这条', 1500);
       });
     };
-    card.appendChild(copyBtn);
+    actions.appendChild(copyBtn);
+    card.appendChild(actions);
 
     container.appendChild(card);
   });
+}
+
+function buildFullArticle(data) {
+  const { mainTitle, posts } = data;
+  const sections = posts.map(p => `【${p.heading}】\n\n${p.content}`).join('\n\n\n');
+  return `${mainTitle}\n\n${sections}`;
 }
 
 async function generate() {
@@ -252,13 +302,11 @@ async function generate() {
   const btn = document.getElementById('generateBtn');
 
   errorEl.textContent = '';
-
   if (!voiceText) { errorEl.textContent = '请先粘贴语音转文字内容'; return; }
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>生成中...';
   document.getElementById('outputSection').style.display = 'none';
-  document.getElementById('postsContainer').innerHTML = '';
 
   try {
     const res = await fetch(BASE_URL, {
@@ -284,7 +332,8 @@ async function generate() {
     const data = await res.json();
     const text = data.content[0].text;
 
-    renderPosts(text);
+    parsedData = parseOutput(text);
+    renderPosts(parsedData);
     document.getElementById('outputSection').style.display = 'block';
     document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
 
@@ -297,9 +346,11 @@ async function generate() {
 }
 
 function copyAll(btn) {
-  navigator.clipboard.writeText(allPostsText).then(() => {
+  if (!parsedData) return;
+  const article = buildFullArticle(parsedData);
+  navigator.clipboard.writeText(article).then(() => {
     btn.innerHTML = '✅ 已复制';
-    setTimeout(() => btn.innerHTML = '📋 全部复制（合并为长文）', 1500);
+    setTimeout(() => btn.innerHTML = '📄 全部复制（合并为完整公众号）', 1500);
   });
 }
 </script>
