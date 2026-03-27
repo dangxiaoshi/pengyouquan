@@ -119,6 +119,47 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   .footer { text-align: center; padding: 24px; font-size: 12px; color: #c7c7cc; }
+
+  /* 设置面板 */
+  .settings-toggle {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 12px; padding: 5px 12px;
+    border: 1px solid #e5e5ea; border-radius: 20px;
+    font-size: 12px; color: #86868b; background: #fff;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .settings-toggle:hover { border-color: #F5A623; color: #F5A623; }
+  .settings-card {
+    background: #fff; border-radius: 16px; padding: 24px 28px;
+    margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1.5px solid #F5A623;
+  }
+  .settings-card .card-label { margin-bottom: 16px; }
+  .settings-row { margin-bottom: 14px; }
+  .settings-row label {
+    display: block; font-size: 12px; font-weight: 600; color: #86868b;
+    margin-bottom: 6px; letter-spacing: 0.3px;
+  }
+  .settings-input-wrap { position: relative; display: flex; }
+  .settings-input {
+    flex: 1; padding: 10px 14px; border: 1px solid #e5e5ea; border-radius: 10px;
+    font-size: 14px; font-family: monospace; color: #1d1d1f;
+    background: #fafafa; outline: none; transition: border 0.2s;
+  }
+  .settings-input:focus { border-color: #F5A623; background: #fff; }
+  .btn-eye {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: #86868b; font-size: 16px;
+    padding: 2px 4px;
+  }
+  .settings-hint { font-size: 11px; color: #c7c7cc; margin-top: 4px; }
+  .btn-save-settings {
+    padding: 9px 20px; border: none; border-radius: 10px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    background: #F5A623; color: #fff; transition: all 0.2s ease;
+  }
+  .btn-save-settings:hover { background: #e6991a; }
+  .save-ok { display: inline-block; margin-left: 10px; font-size: 12px; color: #34c759; }
 </style>
 </head>
 <body>
@@ -127,9 +168,40 @@
   <div class="step-tag">✍️ 文案助手</div>
   <h1>朋友圈文案生成器</h1>
   <p class="subtitle">粘贴语音转文字，生成三条连载 · 合并即公众号</p>
+  <button class="settings-toggle" onclick="toggleSettings()">⚙️ API 设置</button>
 </div>
 
 <div class="main">
+
+  <!-- 设置面板 -->
+  <div id="settingsPanel" class="settings-card" style="display:none">
+    <div class="card-label">⚙️ API 设置（保存在本地，刷新不丢失）</div>
+
+    <div class="settings-row">
+      <label>API Key</label>
+      <div class="settings-input-wrap">
+        <input type="password" id="settingApiKey" class="settings-input" placeholder="sk-..." />
+        <button class="btn-eye" onclick="toggleKeyVisibility()" title="显示/隐藏">👁</button>
+      </div>
+      <div class="settings-hint">填你的 Anthropic API Key 或中转站 Key</div>
+    </div>
+
+    <div class="settings-row">
+      <label>Base URL（中转站地址）</label>
+      <input type="text" id="settingBaseUrl" class="settings-input" placeholder="https://api.anthropic.com" />
+      <div class="settings-hint">官方：https://api.anthropic.com &nbsp;｜&nbsp; hardon：https://api.hardon.work &nbsp;｜&nbsp; pumpkin：https://new.pumpkinai.vip</div>
+    </div>
+
+    <div class="settings-row">
+      <label>模型</label>
+      <input type="text" id="settingModel" class="settings-input" placeholder="claude-3-5-haiku-20241022" />
+      <div class="settings-hint">haiku：claude-3-5-haiku-20241022 &nbsp;｜&nbsp; sonnet：claude-sonnet-4-6</div>
+    </div>
+
+    <button class="btn-save-settings" onclick="saveSettings()">💾 保存</button>
+    <span class="save-ok" id="saveOk" style="display:none">✅ 已保存</span>
+  </div>
+
   <div class="card">
     <div class="card-label">语音转文字内容</div>
     <textarea id="voiceText" rows="8" placeholder="把语音转出来的原始文字粘贴进来，不用整理，越原始越好
@@ -155,8 +227,52 @@
 <div class="footer">朋友圈文案生成器 · AI 驱动</div>
 
 <script>
-const API_KEY = 'sk-s32x3JETsnsisEWG3e01Ee94B7Ba464fB7E830Fc41Ea2899';
-const BASE_URL = 'https://new.pumpkinai.vip/v1/messages';
+// 默认值
+const DEFAULTS = {
+  apiKey: 'sk-s32x3JETsnsisEWG3e01Ee94B7Ba464fB7E830Fc41Ea2899',
+  baseUrl: 'https://api.hardon.work',
+  model: 'claude-3-5-haiku-20241022'
+};
+
+function getSettings() {
+  return {
+    apiKey: localStorage.getItem('pq_apiKey') || DEFAULTS.apiKey,
+    baseUrl: localStorage.getItem('pq_baseUrl') || DEFAULTS.baseUrl,
+    model: localStorage.getItem('pq_model') || DEFAULTS.model
+  };
+}
+
+function toggleSettings() {
+  const panel = document.getElementById('settingsPanel');
+  const visible = panel.style.display !== 'none';
+  if (!visible) {
+    // 打开时填入当前值
+    const s = getSettings();
+    document.getElementById('settingApiKey').value = s.apiKey;
+    document.getElementById('settingBaseUrl').value = s.baseUrl;
+    document.getElementById('settingModel').value = s.model;
+  }
+  panel.style.display = visible ? 'none' : 'block';
+}
+
+function toggleKeyVisibility() {
+  const input = document.getElementById('settingApiKey');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function saveSettings() {
+  const apiKey = document.getElementById('settingApiKey').value.trim();
+  const baseUrl = document.getElementById('settingBaseUrl').value.trim().replace(/\/$/, '');
+  const model = document.getElementById('settingModel').value.trim();
+
+  if (apiKey) localStorage.setItem('pq_apiKey', apiKey);
+  if (baseUrl) localStorage.setItem('pq_baseUrl', baseUrl);
+  if (model) localStorage.setItem('pq_model', model);
+
+  const ok = document.getElementById('saveOk');
+  ok.style.display = 'inline';
+  setTimeout(() => { ok.style.display = 'none'; }, 2000);
+}
 
 function buildPrompt(voiceText) {
   return `你是我的朋友圈文案助手。我会给你一段语音转文字的原始内容，里面有重复、跑题、口语填充词，没关系。
@@ -309,16 +425,17 @@ async function generate() {
   document.getElementById('outputSection').style.display = 'none';
 
   try {
-    const res = await fetch(BASE_URL, {
+    const { apiKey, baseUrl, model } = getSettings();
+    const res = await fetch(baseUrl + '/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: model,
         max_tokens: 2048,
         messages: [{ role: 'user', content: buildPrompt(voiceText) }]
       })
