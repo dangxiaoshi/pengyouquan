@@ -183,19 +183,19 @@
         <input type="password" id="settingApiKey" class="settings-input" placeholder="sk-..." />
         <button class="btn-eye" onclick="toggleKeyVisibility()" title="显示/隐藏">👁</button>
       </div>
-      <div class="settings-hint">填你的 Anthropic API Key 或中转站 Key</div>
+      <div class="settings-hint">填你的 DeepSeek API Key</div>
     </div>
 
     <div class="settings-row">
       <label>Base URL（中转站地址）</label>
       <input type="text" id="settingBaseUrl" class="settings-input" placeholder="https://api.anthropic.com" />
-      <div class="settings-hint">官方：https://api.anthropic.com &nbsp;｜&nbsp; hardon：https://api.hardon.work &nbsp;｜&nbsp; pumpkin：https://new.pumpkinai.vip</div>
+      <div class="settings-hint">官方：https://api.deepseek.com</div>
     </div>
 
     <div class="settings-row">
       <label>模型</label>
       <input type="text" id="settingModel" class="settings-input" placeholder="claude-3-5-haiku-20241022" />
-      <div class="settings-hint">haiku：claude-3-5-haiku-20241022 &nbsp;｜&nbsp; sonnet：claude-sonnet-4-6</div>
+      <div class="settings-hint">deepseek-chat &nbsp;｜&nbsp; deepseek-reasoner</div>
     </div>
 
     <button class="btn-save-settings" onclick="saveSettings()">💾 保存</button>
@@ -229,9 +229,9 @@
 <script>
 // 默认值
 const DEFAULTS = {
-  apiKey: 'sk-s32x3JETsnsisEWG3e01Ee94B7Ba464fB7E830Fc41Ea2899',
-  baseUrl: 'https://api.hardon.work',
-  model: 'claude-3-5-haiku-20241022'
+  apiKey: 'sk-a1d68136d14e410d8b652595fcb91c7d',
+  baseUrl: 'https://api.deepseek.com',
+  model: 'deepseek-chat'
 };
 
 function getSettings() {
@@ -426,13 +426,11 @@ async function generate() {
 
   try {
     const { apiKey, baseUrl, model } = getSettings();
-    const res = await fetch(baseUrl + '/v1/messages', {
+    const res = await fetch(baseUrl + '/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'Authorization': 'Bearer ' + apiKey
       },
       body: JSON.stringify({
         model: model,
@@ -447,7 +445,7 @@ async function generate() {
     }
 
     const data = await res.json();
-    const text = data.content[0].text;
+    const text = data.choices[0].message.content;
 
     parsedData = parseOutput(text);
     renderPosts(parsedData);
